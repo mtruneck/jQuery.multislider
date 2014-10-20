@@ -147,10 +147,10 @@ $.fn.multislider = function (option) {
           // HACK by mr.pohoda (skypicker.com)
           // we need to observe when value is changed
           if ($(targetSlider).hasClass('slider1')) {
-            $('.fromText').val(format(actualNumber)).trigger('change');
+            $('.todate .fromText').val(format(actualNumber)).trigger('change');
           }
           else {
-            $('.toText').val(format(actualNumber)).trigger('change');
+            $('.todate .toText').val(format(actualNumber)).trigger('change');
           }
           $(targetSlider).find('span').empty().text(format(actualNumber))
         } else if (option.checkbox == true) {
