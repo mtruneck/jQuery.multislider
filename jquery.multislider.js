@@ -4,7 +4,8 @@ $.fn.multislider = function (option) {
     checkbox: false,
     minVal: 0,
     maxVal: 100,
-    toolText: ''
+    toolText: '',
+    changeImmediately: false
   }, option);
   var format = function (num) {
     num = num.toString();
@@ -146,12 +147,16 @@ $.fn.multislider = function (option) {
           var actualNumber = (actualPart * stepSum) + minVal < minVal ? minVal : (actualPart * stepSum) + minVal;
           // HACK by mr.pohoda (skypicker.com)
           // we need to observe when value is changed
-          if ($(targetSlider).hasClass('slider1')) {
-            $('.todate .fromText').val(format(actualNumber)).trigger('change');
+          // mtruneck: Checking first if there is .fromText input out there. Not aplying the HACK otherwise
+          if ($('.fromText', $(elBox).parent().parent())) {
+            if ($(targetSlider).hasClass('slider1')) {
+              $('.fromText', $(elBox).parent()).val(format(actualNumber)).trigger('change');
+            }
+            else {
+              $('.toText', $(elBox).parent()).val(format(actualNumber)).trigger('change');
+            }
           }
-          else {
-            $('.todate .toText').val(format(actualNumber)).trigger('change');
-          }
+          if (option.changeImmediately) { changeInput(); }
           $(targetSlider).find('span').empty().text(format(actualNumber))
         } else if (option.checkbox == true) {
           var selectedArea = $(targetSlider)[0].offsetLeft - sMinLeft;
@@ -160,7 +165,7 @@ $.fn.multislider = function (option) {
           $(targetSlider).next('div').find('span').empty().text(arrVal[actualNumber])
         }
       };
-      var changeInput = function () {
+      function changeInput() {
         if (option.fromTo == true) {
           var text1 = $('.slider1 span', el).text();
           text1 = text1.replace(/\s/g, '');
@@ -193,9 +198,9 @@ $.fn.multislider = function (option) {
           position = position < sMinLeft ? sMinLeft : position;
           position = position > sMaxLeft ? sMaxLeft : position;
           actualPosition = clientX;
-          if ($(targetSlider).is('.slider1') && position <= $('.slider2')[0].offsetLeft - sWidth + 30) {
+          if ($(targetSlider).is('.slider1') && position <= $('.slider2', elBox)[0].offsetLeft - sWidth + 30) {
             $(targetSlider).css('left', position + 'px')
-          } else if ($(targetSlider).is('.slider2') && position >= $('.slider1')[0].offsetLeft + sWidth - 30) {
+          } else if ($(targetSlider).is('.slider2') && position >= $('.slider1', elBox)[0].offsetLeft + sWidth - 30) {
             $(targetSlider).css('left', position + 'px')
           }
           selectedArea();
