@@ -110,10 +110,10 @@ $.fn.multislider = function (option) {
       var areaPart = (startWidth / partVal);
       var startLeftS = Math.round(((minActualVal - minVal) / stepSum) * areaPart) + sMinLeft;
       var startRightS = Math.round(((maxActualVal - minVal) / stepSum) * areaPart) + sMinLeft;
-      if (minVal < minActualVal && minActualVal < maxVal) {
+      if (minVal <= minActualVal && minActualVal <= maxVal) {
         $('.slider1', this).css('left', startLeftS + 'px')
       }
-      if (maxVal > maxActualVal && maxActualVal > minVal) {
+      if (maxVal >= maxActualVal && maxActualVal >= minVal) {
         $('.slider2', this).css('left', startRightS + 'px')
       }
       var sliderOpen = false;
@@ -198,9 +198,10 @@ $.fn.multislider = function (option) {
           position = position < sMinLeft ? sMinLeft : position;
           position = position > sMaxLeft ? sMaxLeft : position;
           actualPosition = clientX;
-          if ($(targetSlider).is('.slider1') && position <= $('.slider2', elBox)[0].offsetLeft - sWidth + 30) {
+          // -5 and +5 below means we prevent the sliders to overlay completely when very close
+          if ($(targetSlider).is('.slider1') && position <= $('.slider2', elBox)[0].offsetLeft -5) {
             $(targetSlider).css('left', position + 'px')
-          } else if ($(targetSlider).is('.slider2') && position >= $('.slider1', elBox)[0].offsetLeft + sWidth - 30) {
+          } else if ($(targetSlider).is('.slider2') && position >= $('.slider1', elBox)[0].offsetLeft +5) {
             $(targetSlider).css('left', position + 'px')
           }
           selectedArea();
